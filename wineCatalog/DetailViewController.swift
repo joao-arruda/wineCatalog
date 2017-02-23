@@ -29,6 +29,10 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     
     var countryFinal : String?
     
+    var imageMatchesTextPassed : [String]?
+    
+    var detailMatchesTextPassed : [String]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,13 +40,20 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.dataSource = self
         tableView.allowsSelection = false;
         
+        self.navigationItem.title = nameWine
+        
         let joiner = ""
         let elements = countryPassed
         let joinedStrings = elements?.joined(separator: joiner)
         
         let base: UInt32 = 127397
         
-        countryFinal = joinedStrings?.unicodeScalars.flatMap { String.init(UnicodeScalar(base + $0.value)!) }.joined()
+        if(countryFinal != ""){
+            countryFinal = joinedStrings?.unicodeScalars.flatMap { String.init(UnicodeScalar(base + $0.value)!) }.joined()
+        }
+        else{
+            countryFinal = "🌐"
+        }
         
         wineNameLbl.text = nameWine
         
@@ -72,6 +83,8 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "wineMatchesDetails", for: indexPath) as! MatchesViewCell
         
         cell.imagemMatches.image = imageMatchesPassed[indexPath.row]
+        cell.matchesTxt.text = imageMatchesTextPassed?[indexPath.row]
+        cell.detailsMatches.text = detailMatchesTextPassed?[indexPath.row]
         
         return cell
         
